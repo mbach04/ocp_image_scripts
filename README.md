@@ -16,5 +16,10 @@ chmod +x *.sh
 ./docker-pull-middleware-images.sh
 ./docker-save-to-tar.sh
 ```
+## Notes
+I use `jq` to generate the rough list of images the streams are looking for. While logged into an openshift cluster:
+```bash
+oc get --export is -n openshift -o json | jq -r '.items[].spec.tags[].from.name' > image-streams
+```
 
 Feel free to PR against this repo to do anything fancier
