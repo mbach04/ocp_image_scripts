@@ -19,7 +19,18 @@ chmod +x *.sh
 ## Notes
 I use `jq` to generate the rough list of images the streams are looking for. While logged into an openshift cluster:
 ```bash
-oc get --export is -n openshift -o json | jq -r '.items[].spec.tags[].from.name' > image-streams
+oc get --export is -n openshift -o json | jq -r '.items[].spec.tags[].from.name' > image-streams.json
+```
+
+Mod the image streams with jq
+```bash
+oc get is --export -o
+jq  '.items[].spec.tags[] +=  {"importPolicy": { "insecure": true } }' image-streams.json
+```
+
+Create the image streams with oc
+```bash
+oc create -f image-streams.json
 ```
 
 Feel free to PR against this repo to do anything fancier
